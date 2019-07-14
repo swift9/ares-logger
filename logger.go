@@ -24,7 +24,7 @@ func getLoggerLevel(lvl string) zapcore.Level {
 }
 
 type Logger struct {
-	proxy *zap.SugaredLogger
+	ZapSugared *zap.SugaredLogger
 }
 
 func New(fileName string, level string, maxSize int, maxBackups int, maxAge int) *Logger {
@@ -41,62 +41,90 @@ func New(fileName string, level string, maxSize int, maxBackups int, maxAge int)
 	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
 	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
 	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
-	log.proxy = zap.Sugar()
+	log.ZapSugared = zap.Sugar()
 	return log
 }
 
 func (log *Logger) Debug(args ...interface{}) {
-	log.proxy.Debug(args...)
+	log.ZapSugared.Debug(args...)
 }
 
 func (log *Logger) Debugf(template string, args ...interface{}) {
-	log.proxy.Debugf(template, args...)
+	log.ZapSugared.Debugf(template, args...)
+}
+
+func (log *Logger) Debugw(template string, args ...interface{}) {
+	log.ZapSugared.Debugw(template, args...)
 }
 
 func (log *Logger) Info(args ...interface{}) {
-	log.proxy.Info(args...)
+	log.ZapSugared.Info(args...)
 }
 
 func (log *Logger) Infof(template string, args ...interface{}) {
-	log.proxy.Infof(template, args...)
+	log.ZapSugared.Infof(template, args...)
+}
+
+func (log *Logger) Infow(template string, args ...interface{}) {
+	log.ZapSugared.Infow(template, args...)
 }
 
 func (log *Logger) Warn(args ...interface{}) {
-	log.proxy.Warn(args...)
+	log.ZapSugared.Warn(args...)
 }
 
 func (log *Logger) Warnf(template string, args ...interface{}) {
-	log.proxy.Warnf(template, args...)
+	log.ZapSugared.Warnf(template, args...)
+}
+
+func (log *Logger) Warnw(template string, args ...interface{}) {
+	log.ZapSugared.Warnw(template, args...)
 }
 
 func (log *Logger) Error(args ...interface{}) {
-	log.proxy.Error(args...)
+	log.ZapSugared.Error(args...)
 }
 
 func (log *Logger) Errorf(template string, args ...interface{}) {
-	log.proxy.Errorf(template, args...)
+	log.ZapSugared.Errorf(template, args...)
+}
+
+func (log *Logger) Errorw(template string, args ...interface{}) {
+	log.ZapSugared.Errorw(template, args...)
 }
 
 func (log *Logger) DPanic(args ...interface{}) {
-	log.proxy.DPanic(args...)
+	log.ZapSugared.DPanic(args...)
 }
 
 func (log *Logger) DPanicf(template string, args ...interface{}) {
-	log.proxy.DPanicf(template, args...)
+	log.ZapSugared.DPanicf(template, args...)
+}
+
+func (log *Logger) DPanicw(template string, args ...interface{}) {
+	log.ZapSugared.DPanicw(template, args...)
 }
 
 func (log *Logger) Panic(args ...interface{}) {
-	log.proxy.Panic(args...)
+	log.ZapSugared.Panic(args...)
 }
 
 func (log *Logger) Panicf(template string, args ...interface{}) {
-	log.proxy.Panicf(template, args...)
+	log.ZapSugared.Panicf(template, args...)
+}
+
+func (log *Logger) Panicw(template string, args ...interface{}) {
+	log.ZapSugared.Panicw(template, args...)
 }
 
 func (log *Logger) Fatal(args ...interface{}) {
-	log.proxy.Fatal(args...)
+	log.ZapSugared.Fatal(args...)
 }
 
 func (log *Logger) Fatalf(template string, args ...interface{}) {
-	log.proxy.Fatalf(template, args...)
+	log.ZapSugared.Fatalf(template, args...)
+}
+
+func (log *Logger) Fatalw(template string, args ...interface{}) {
+	log.ZapSugared.Fatalw(template, args...)
 }
