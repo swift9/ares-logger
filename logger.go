@@ -23,12 +23,12 @@ func getLoggerLevel(lvl string) zapcore.Level {
 	return zapcore.InfoLevel
 }
 
-type logger struct {
+type Logger struct {
 	proxy *zap.SugaredLogger
 }
 
-func New(fileName string, level string, maxSize int, maxBackups int, maxAge int) *logger {
-	log := &logger{}
+func New(fileName string, level string, maxSize int, maxBackups int, maxAge int) *Logger {
+	log := &Logger{}
 	syncWriter := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   fileName,
 		MaxSize:    maxSize,
@@ -45,58 +45,58 @@ func New(fileName string, level string, maxSize int, maxBackups int, maxAge int)
 	return log
 }
 
-func (log *logger) Debug(args ...interface{}) {
+func (log *Logger) Debug(args ...interface{}) {
 	log.proxy.Debug(args...)
 }
 
-func (log *logger) Debugf(template string, args ...interface{}) {
+func (log *Logger) Debugf(template string, args ...interface{}) {
 	log.proxy.Debugf(template, args...)
 }
 
-func (log *logger) Info(args ...interface{}) {
+func (log *Logger) Info(args ...interface{}) {
 	log.proxy.Info(args...)
 }
 
-func (log *logger) Infof(template string, args ...interface{}) {
+func (log *Logger) Infof(template string, args ...interface{}) {
 	log.proxy.Infof(template, args...)
 }
 
-func (log *logger) Warn(args ...interface{}) {
+func (log *Logger) Warn(args ...interface{}) {
 	log.proxy.Warn(args...)
 }
 
-func (log *logger) Warnf(template string, args ...interface{}) {
+func (log *Logger) Warnf(template string, args ...interface{}) {
 	log.proxy.Warnf(template, args...)
 }
 
-func (log *logger) Error(args ...interface{}) {
+func (log *Logger) Error(args ...interface{}) {
 	log.proxy.Error(args...)
 }
 
-func (log *logger) Errorf(template string, args ...interface{}) {
+func (log *Logger) Errorf(template string, args ...interface{}) {
 	log.proxy.Errorf(template, args...)
 }
 
-func (log *logger) DPanic(args ...interface{}) {
+func (log *Logger) DPanic(args ...interface{}) {
 	log.proxy.DPanic(args...)
 }
 
-func (log *logger) DPanicf(template string, args ...interface{}) {
+func (log *Logger) DPanicf(template string, args ...interface{}) {
 	log.proxy.DPanicf(template, args...)
 }
 
-func (log *logger) Panic(args ...interface{}) {
+func (log *Logger) Panic(args ...interface{}) {
 	log.proxy.Panic(args...)
 }
 
-func (log *logger) Panicf(template string, args ...interface{}) {
+func (log *Logger) Panicf(template string, args ...interface{}) {
 	log.proxy.Panicf(template, args...)
 }
 
-func (log *logger) Fatal(args ...interface{}) {
+func (log *Logger) Fatal(args ...interface{}) {
 	log.proxy.Fatal(args...)
 }
 
-func (log *logger) Fatalf(template string, args ...interface{}) {
+func (log *Logger) Fatalf(template string, args ...interface{}) {
 	log.proxy.Fatalf(template, args...)
 }
