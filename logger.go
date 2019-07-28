@@ -31,6 +31,21 @@ func getLoggerLevel(lvl string) zapcore.Level {
 	return zapcore.InfoLevel
 }
 
+type ILogger interface {
+	Debug(args ...interface{})
+	Debugf(template string, args ...interface{})
+	Debugw(template string, args ...interface{})
+	Info(args ...interface{})
+	Infof(template string, args ...interface{})
+	Infow(template string, args ...interface{})
+	Warn(args ...interface{})
+	Warnf(template string, args ...interface{})
+	Warnw(template string, args ...interface{})
+	Error(args ...interface{})
+	Errorf(template string, args ...interface{})
+	Errorw(template string, args ...interface{})
+}
+
 type Logger struct {
 	ZapSugared *zap.SugaredLogger
 }
@@ -102,40 +117,4 @@ func (log *Logger) Errorf(template string, args ...interface{}) {
 
 func (log *Logger) Errorw(template string, args ...interface{}) {
 	log.ZapSugared.Errorw(template, args...)
-}
-
-func (log *Logger) DPanic(args ...interface{}) {
-	log.ZapSugared.DPanic(args...)
-}
-
-func (log *Logger) DPanicf(template string, args ...interface{}) {
-	log.ZapSugared.DPanicf(template, args...)
-}
-
-func (log *Logger) DPanicw(template string, args ...interface{}) {
-	log.ZapSugared.DPanicw(template, args...)
-}
-
-func (log *Logger) Panic(args ...interface{}) {
-	log.ZapSugared.Panic(args...)
-}
-
-func (log *Logger) Panicf(template string, args ...interface{}) {
-	log.ZapSugared.Panicf(template, args...)
-}
-
-func (log *Logger) Panicw(template string, args ...interface{}) {
-	log.ZapSugared.Panicw(template, args...)
-}
-
-func (log *Logger) Fatal(args ...interface{}) {
-	log.ZapSugared.Fatal(args...)
-}
-
-func (log *Logger) Fatalf(template string, args ...interface{}) {
-	log.ZapSugared.Fatalf(template, args...)
-}
-
-func (log *Logger) Fatalw(template string, args ...interface{}) {
-	log.ZapSugared.Fatalw(template, args...)
 }
