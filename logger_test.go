@@ -20,5 +20,9 @@ func init() {
 }
 
 func TestLog(t *testing.T) {
+	Log.Info("log is ready", "a", 1, "b", 2, "error", errors.New("ss"))
+}
+
+func TestLogw(t *testing.T) {
 	Log.Infow("log is ready", "a", 1, "b", 2, "error", errors.New("ss"))
 }
