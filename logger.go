@@ -4,6 +4,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"log"
 )
 
 var levelMap = map[string]zapcore.Level{
@@ -35,7 +36,9 @@ type Logger struct {
 }
 
 func New(fileName string, level string, maxSize int, maxBackups int, maxAge int) *Logger {
-	log := &Logger{}
+	log.Println("init zap log ...")
+	log.Println("fileName: "+fileName, " level:", level, " maxSize:", maxSize, " maxBackups:", maxBackups, " maxAge:", maxAge)
+	zapLog := &Logger{}
 	syncWriter := zapcore.AddSync(&lumberjack.Logger{
 		Filename:   fileName,
 		MaxSize:    maxSize,
@@ -48,8 +51,9 @@ func New(fileName string, level string, maxSize int, maxBackups int, maxAge int)
 	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
 	core := zapcore.NewCore(zapcore.NewConsoleEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
 	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
-	log.ZapSugared = zap.Sugar()
-	return log
+	zapLog.ZapSugared = zap.Sugar()
+	log.Println("zap log is ready")
+	return zapLog
 }
 
 func (log *Logger) Debug(args ...interface{}) {
