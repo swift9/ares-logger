@@ -8,12 +8,19 @@ import (
 
 var levelMap = map[string]zapcore.Level{
 	"debug":  zapcore.DebugLevel,
+	"DEBUG":  zapcore.DebugLevel,
 	"info":   zapcore.InfoLevel,
+	"INFO":   zapcore.InfoLevel,
 	"warn":   zapcore.WarnLevel,
+	"WARN":   zapcore.WarnLevel,
 	"error":  zapcore.ErrorLevel,
+	"ERROR":  zapcore.ErrorLevel,
 	"dpanic": zapcore.DPanicLevel,
+	"DPANIC": zapcore.DPanicLevel,
 	"panic":  zapcore.PanicLevel,
+	"PANIC":  zapcore.PanicLevel,
 	"fatal":  zapcore.FatalLevel,
+	"FATAL":  zapcore.FatalLevel,
 }
 
 func getLoggerLevel(lvl string) zapcore.Level {
@@ -37,9 +44,9 @@ func New(fileName string, level string, maxSize int, maxBackups int, maxAge int)
 		LocalTime:  true,
 		Compress:   true,
 	})
-	encoder := zap.NewProductionEncoderConfig()
+	encoder := zap.NewDevelopmentEncoderConfig()
 	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
-	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
+	core := zapcore.NewCore(zapcore.NewConsoleEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
 	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 	log.ZapSugared = zap.Sugar()
 	return log
