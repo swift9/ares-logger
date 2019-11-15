@@ -59,7 +59,7 @@ func New(fileName string, level string, maxSize int, maxBackups int, maxAge int)
 		LocalTime:  true,
 		Compress:   true,
 	})
-	encoder := zap.NewDevelopmentEncoderConfig()
+	encoder := zap.NewProductionEncoderConfig()
 	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
 	core := zapcore.NewCore(zapcore.NewConsoleEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
 	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
@@ -112,5 +112,75 @@ func (log *Logger) Errorf(template string, args ...interface{}) {
 }
 
 func (log *Logger) Errorw(template string, args ...interface{}) {
+	log.ZapSugared.Errorw(template, args...)
+}
+
+type JsonLogger struct {
+	ZapSugared *zap.SugaredLogger
+}
+
+func NewJson(fileName string, level string, maxSize int, maxBackups int, maxAge int) *JsonLogger {
+	zapLog := &JsonLogger{}
+	syncWriter := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    maxSize,
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge,
+		LocalTime:  true,
+		Compress:   true,
+	})
+	encoder := zap.NewProductionEncoderConfig()
+	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
+	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
+	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	zapLog.ZapSugared = zap.Sugar()
+	return zapLog
+}
+
+func (log *JsonLogger) Debug(args ...interface{}) {
+	log.ZapSugared.Debug(args...)
+}
+
+func (log *JsonLogger) Debugf(template string, args ...interface{}) {
+	log.ZapSugared.Debugf(template, args...)
+}
+
+func (log *JsonLogger) Debugw(template string, args ...interface{}) {
+	log.ZapSugared.Debugw(template, args...)
+}
+
+func (log *JsonLogger) Info(args ...interface{}) {
+	log.ZapSugared.Info(args...)
+}
+
+func (log *JsonLogger) Infof(template string, args ...interface{}) {
+	log.ZapSugared.Infof(template, args...)
+}
+
+func (log *JsonLogger) Infow(template string, args ...interface{}) {
+	log.ZapSugared.Infow(template, args...)
+}
+
+func (log *JsonLogger) Warn(args ...interface{}) {
+	log.ZapSugared.Warn(args...)
+}
+
+func (log *JsonLogger) Warnf(template string, args ...interface{}) {
+	log.ZapSugared.Warnf(template, args...)
+}
+
+func (log *JsonLogger) Warnw(template string, args ...interface{}) {
+	log.ZapSugared.Warnw(template, args...)
+}
+
+func (log *JsonLogger) Error(args ...interface{}) {
+	log.ZapSugared.Error(args...)
+}
+
+func (log *JsonLogger) Errorf(template string, args ...interface{}) {
+	log.ZapSugared.Errorf(template, args...)
+}
+
+func (log *JsonLogger) Errorw(template string, args ...interface{}) {
 	log.ZapSugared.Errorw(template, args...)
 }
