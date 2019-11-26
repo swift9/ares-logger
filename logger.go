@@ -137,6 +137,27 @@ func NewJson(fileName string, level string, maxSize int, maxBackups int, maxAge 
 	return zapLog
 }
 
+func NewJsonWithMsgKey(fileName string, level string, maxSize int, maxBackups int, maxAge int, msgKey string) *JsonLogger {
+	zapLog := &JsonLogger{}
+	syncWriter := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    maxSize,
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge,
+		LocalTime:  true,
+		Compress:   true,
+	})
+	encoder := zap.NewProductionEncoderConfig()
+	if msgKey != "" {
+		encoder.MessageKey = msgKey
+	}
+	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
+	core := zapcore.NewCore(zapcore.NewJSONEncoder(encoder), syncWriter, zap.NewAtomicLevelAt(getLoggerLevel(level)))
+	zap := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
+	zapLog.ZapSugared = zap.Sugar()
+	return zapLog
+}
+
 func (log *JsonLogger) Debug(args ...interface{}) {
 	log.ZapSugared.Debug(args...)
 }
